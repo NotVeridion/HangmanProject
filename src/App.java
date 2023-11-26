@@ -119,16 +119,31 @@ class Stickman {
         this.lives = lives;
     }
 
+    //you can use triple quotes to print exactly what you type in code instead of having to call println constantly
+    String Enemy = """
+            
+
+
+                            >:(
+
+
+
+            """;
+
     //Ignore this for now. I have an rpg idea for the game I'll work on. 
     public void printEnemy(){
-        System.out.println();
-        System.out.println();
-        System.out.println();
 
-        System.out.print("                     >:(                     ");
+        // System.out.println();
+        // System.out.println();
+        // System.out.println();
 
-        System.out.println();
-        System.out.println();
-        System.out.println();
+        // System.out.print("                     >:(                     ");
+
+        // System.out.println();
+        // System.out.println();
+        // System.out.println();
+
+        System.out.println(Enemy);
+        
     }
 }
