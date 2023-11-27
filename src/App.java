@@ -248,63 +248,6 @@ class User {
         System.out.println();
         System.out.println();
         System.out.println("HP: " + hp + " | " + "Damage: " + damage);
-                input.close();
-
-            }
-            else{
-                end = true;
-            }
-
-
-        }
-
-}}
-
-// Just in case we want to add other option tweaks.
-/*
- * class Menu{
- * public void printMenu(){
- * System.out.println("What would you like to do?");
- * System.out.println("1. Play");
- * }
- * }
- */
-
-class Stickman {
-    int lives;
-    // int damage;
-    // int hp;
-
-    public Stickman(int lives) {
-        this.lives = lives;
     }
 
-    // you can use triple quotes to print exactly what you type in code instead of
-    // having to call println constantly
-    String Enemy = """
-
-
-
-                            >:(
-
-
-
-            """;
-
-    // Ignore this for now. I have an rpg idea for the game I'll work on.
-    public void printEnemy() {
-
-        // System.out.println();
-        // System.out.println();
-        // System.out.println();
-
-        // System.out.print(" >:( ");
-
-        // System.out.println();
-        // System.out.println();
-        // System.out.println();
-
-        System.out.println(Enemy);
-
-    }
 }
