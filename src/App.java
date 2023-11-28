@@ -209,11 +209,11 @@ class Stickman {
 
     public void printEnemy() {
         System.out.println("                        HP: " + hp + " | " + "Damage: " + damage);
-        System.out.println();
-        System.out.println("                                        >:(");
-        System.out.println("                                       ------");
-        System.out.println();
-        System.out.println();
+        System.out.println("                              /\\ \\  / /\\");
+        System.out.println("                             //\\\\ .. //\\\\");
+        System.out.println("                             //\\((  ))/\\\\");
+        System.out.println("                             /  < `' >  \\");
+        System.out.println("                           ----------------");
     }
 }
 
@@ -253,14 +253,14 @@ class User {
     }
 
     public void printUser() {
+        
         System.out.println();
-
-        System.out.println("          :O");
-        System.out.println("         ------");
-
-        System.out.println();
-        System.out.println();
+        System.out.println("         /\\_/\\");
+        System.out.println("        ( o.o )");
+        System.out.println("         > ^ <");
+        System.out.println("       ---------");
         System.out.println("HP: " + hp + " | " + "Damage: " + damage);
+        System.out.println("----------------------------------------------");
     }
 
 }
