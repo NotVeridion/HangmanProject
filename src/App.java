@@ -27,7 +27,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         Boolean end = false;
         String word;
-        char[] word_copy;
+        char[] word_copy = null;
 
         Stickman enemy = new Stickman(1000, 18);
         User user = new User(70, 23);
@@ -56,7 +56,7 @@ public class App {
             System.out.println();
             System.out.println(); // Print out the enemy hp and damage
             word = getNewWord(words); // Get a new word from the array list
-            word_copy = word.toCharArray();
+            word_copy = new char[word.length()];
 
             // Mask the chosen word so the user sees their progress on the word over time
             for (int i = 0; i < word.length(); i++) {
@@ -133,11 +133,19 @@ public class App {
                 }
 
                 // For when the enemy is still alive but the word is done
-                if (word_copy.toString().equals(word) && enemy.getHP() >= 0) {
-                    System.out.println("Word complete. Choosing new word.");
-                    System.out.println();
-                    word = getNewWord(words); // Get a new word from the array list
-                    word_copy = word.toCharArray();
+                boolean wordComplete = true;  
+                for (char c : word_copy) {  
+                    if (c == '*') {  
+                        wordComplete = false;  
+                        break;  
+                    }  
+                }  
+
+                if (wordComplete) {  
+                    System.out.println("Word complete. Choosing new word.");  
+                    System.out.println();  
+                    word = getNewWord(words); // Get a new word from the array list  
+                    word_copy = new char[word.length()];  
 
                     // Mask the chosen word so the user sees their progress on the word over time
                     for (int i = 0; i < word.length(); i++) {
@@ -149,10 +157,10 @@ public class App {
                     System.out.println("For comparison");
                     System.out.println(word);
                     System.out.println(word_copy);
-                }
+                }  
 
             }
-
+            
             input.close();
         }
     }
