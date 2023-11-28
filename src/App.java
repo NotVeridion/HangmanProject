@@ -29,8 +29,10 @@ public class App {
         String word;
         char[] word_copy;
 
-        Stickman enemy = new Stickman(1000, 18);
+        Stickman enemy = new Stickman(100, 18);
         User user = new User(70, 23);
+
+        int startHP = user.getHP();
 
         // Creating arraylist of words for random word selection
         ArrayList<String> words = new ArrayList<String>();
@@ -128,6 +130,9 @@ public class App {
                         break; // Turn has ended and the user can choose what to do next
                     case 2:
                         user.heal();
+                        if (user.getHP() > startHP) {
+                            user.setHP(startHP);
+                        }
                         System.out.println("The enemy is powering up...");
                         enemy.setDamage(enemy.getDamage() + (int) (enemy.getDamage() * 0.2));
                 }
@@ -197,9 +202,8 @@ class Stickman {
     public void printEnemy() {
         System.out.println("                        HP: " + hp + " | " + "Damage: " + damage);
         System.out.println();
-
-        System.out.print("                                        >:(                     ");
-
+        System.out.println("                                        >:(");
+        System.out.println("                                       ------");
         System.out.println();
         System.out.println();
     }
@@ -243,7 +247,8 @@ class User {
     public void printUser() {
         System.out.println();
 
-        System.out.print("          :D");
+        System.out.println("          :O");
+        System.out.println("         ------");
 
         System.out.println();
         System.out.println();
