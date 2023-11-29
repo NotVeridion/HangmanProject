@@ -154,6 +154,7 @@ public class App {
                     }
                     System.out.println("The enemy is powering up...");
                     enemy.setDamage(enemy.getDamage() + (int) (enemy.getDamage() * 0.2));
+                    break;
                 case 3:
                     enemy.attack(user);
                     break;
