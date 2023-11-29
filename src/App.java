@@ -25,7 +25,6 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
-        Boolean end = false;
         String word;
         char[] word_copy = null;
 
@@ -33,6 +32,9 @@ public class App {
         User user = new User(70, 23);
 
         int startHP = user.getHP();
+
+        boolean userLose = false;
+        boolean enemyLose = false;
 
         // Creating arraylist of words for random word selection
         ArrayList<String> words = new ArrayList<String>();
@@ -52,123 +54,168 @@ public class App {
             e.printStackTrace();
         }
 
-        while (!end) {
-            Scanner input = new Scanner(System.in);
-            // From here is the process of choosing the word for combat
-            System.out.println();
-            System.out.println(); // Print out the enemy hp and damage
-            word = getNewWord(words); // Get a new word from the array list
-            word_copy = new char[word.length()];
+        Scanner input = new Scanner(System.in);
+        // From here is the process of choosing the word for combat
+        System.out.println();
+        System.out.println(); // Print out the enemy hp and damage
+        word = getNewWord(words); // Get a new word from the array list
+        word_copy = new char[word.length()];
 
-            // Mask the chosen word so the user sees their progress on the word over time
-            for (int i = 0; i < word.length(); i++) {
-                if (word_copy[i] != ' ') {
-                    word_copy[i] = '*';
+        // Mask the chosen word so the user sees their progress on the word over time
+        for (int i = 0; i < word.length(); i++) {
+            if (word_copy[i] != ' ') {
+                word_copy[i] = '_';
+            }
+        }
+
+        System.out.println("Battle commencing...");
+
+        // Printing out the battlefield
+        enemy.printEnemy();
+        user.printUser();
+        System.out.println("Word: " + String.valueOf(word_copy));
+
+        boolean battleFinished = false;
+        while (!battleFinished) {
+
+            // Next, check for if the current word is already done
+            boolean wordComplete = true;
+            for (char c : word_copy) {
+                if (c == '_') {
+                    wordComplete = false;
+                    break;
                 }
             }
 
-            System.out.println("Battle commencing...");
-            boolean battleFinished = false;
-            while (!battleFinished) {
-
-                // First check for win/lose conditions
-                if (enemy.getHP() <= 0) {
-                    System.out.println("Enemy defeated!");
-                    battleFinished = true;
-                } else if (words.isEmpty()) {
-                    System.out.println("No more words remaining. You lose");
-                    battleFinished = true;
-                } else if (user.getHP() <= 0) {
-                    System.out.println("You have died. Game Over");
-                    battleFinished = true;
-                }
-
-                // Printing out the battlefield
-                System.out.println("----------------------------------------------");
-                enemy.printEnemy();
-                user.printUser();
+            if (wordComplete) {
+                System.out.println("Word complete. Choosing new word.");
                 System.out.println();
+                word = getNewWord(words); // Get a new word from the array list
+                word_copy = new char[word.length()];
 
-                // Display actions
-                System.out.println("1: Fight");
-                System.out.println("2: Heal");
-                System.out.println("3: Run");
-                int choice = input.nextInt();
-
-                switch (choice) {
-                    case 1:
-                        // Display word for guessing
-                        System.out.println("Word: " + String.valueOf(word_copy));
-                        System.out.println("Choose a letter: ");
-                        char letter = input.next().charAt(0);
-
-                        System.out.println("----------------------------------------------");
-                        System.out.println("Result: ");
-                        System.out.println();
-
-                        // Check word for user's letter
-                        boolean found = false;
-                        for (int i = 0; i < word.length(); i++) {
-                            if (word.charAt(i) == letter) {
-                                word_copy[i] = letter;
-                                found = true;
-                            }
-                        }
-
-                        // Finally check the actions
-                        if (found) {
-                            user.attack(enemy);
-                            System.out.println("Enemy hit! Enemy has lost " + user.getDamage() + " hp!");
-                            System.out.println();
-                            enemy.attack(user);
-                        } else {
-                            System.out.println("Letter not found. Missed!");
-                            System.out.println();
-                            enemy.attack(user);
-                        }
-
-                        break; // Turn has ended and the user can choose what to do next
-                    case 2:
-                        user.heal();
-                        if (user.getHP() > startHP) {
-                            user.setHP(startHP);
-                        }
-                        System.out.println("The enemy is powering up...");
-                        enemy.setDamage(enemy.getDamage() + (int) (enemy.getDamage() * 0.2));
-                        break;
+                // Mask the chosen word so the user sees their progress on the word over time
+                for (int i = 0; i < word.length(); i++) {
+                    if (word_copy[i] != ' ') {
+                        word_copy[i] = '_';
+                    }
                 }
+                System.out.println("Word: " + String.valueOf(word_copy));
+            }
 
-                // For when the enemy is still alive but the word is done
-                boolean wordComplete = true;  
-                for (char c : word_copy) {  
-                    if (c == '*') {  
-                        wordComplete = false;  
-                        break;  
-                    }  
-                }  
 
-                if (wordComplete) {  
-                    System.out.println("Word complete. Choosing new word.");  
-                    System.out.println();  
-                    word = getNewWord(words); // Get a new word from the array list  
-                    word_copy = new char[word.length()];  
+            // Display actions
+            System.out.println("----------------------------------------------");
+            System.out.println("1: Fight");
+            System.out.println("2: Heal");
+            System.out.println("3: Do Nothing");
+            System.out.println("4: Run");
+            System.out.println();
+            System.out.print("What would you like to do: ");
 
-                    // Mask the chosen word so the user sees their progress on the word over time
+            char choice = input.next().charAt(0);
+
+            switch (choice) {
+                case '1':
+                    // Display word for guessing
+                    enemy.printEnemy();
+                    user.printUser();
+                    System.out.println();
+                    System.out.println("Word: " + String.valueOf(word_copy));
+                    System.out.println();
+                    System.out.print("Choose a letter: ");
+                    char letter = input.next().charAt(0);
+
+                    // Check word for user's letter
+                    boolean found = false;
                     for (int i = 0; i < word.length(); i++) {
-                        if (word_copy[i] != ' ') {
-                            word_copy[i] = '*';
+                        if (word.charAt(i) == letter) {
+                            word_copy[i] = letter;
+                            found = true;
                         }
                     }
 
-                    System.out.println("For comparison");
-                    System.out.println(word);
-                    System.out.println(word_copy);
-                }  
+                    // Finally check the actions
+                    if (found) {
+                        user.attack(enemy);
+                        enemy.printEnemy();
+                        user.printUser();
+                        System.out.println("Letter found, Enemy hit!");
+                        System.out.println("Enemy has lost " + user.getDamage() + " hp!");
+                        System.out.println();
+                        System.out.println("Enemy loses concentration and misses!");
+                        System.out.println();
+                        System.out.println("Word: " + String.valueOf(word_copy));
+                    } else {
+                        System.out.println("Letter not found. Your Attack Missed!");
+                        System.out.println();
+                        enemy.attack(user);
+                    }
 
+                    break; // Turn has ended and the user can choose what to do next
+                case '2':
+                    user.heal();
+                    if (user.getHP() > startHP) {
+                        user.setHP(startHP);
+                    }
+                    enemy.printEnemy();
+                    user.printUser();
+                    System.out.println("User Healed.");
+                    System.out.println("The enemy is Enraged...");
+                    System.out.println("Enemy damage increased!");
+                    System.out.println("Word: " + String.valueOf(word_copy));
+                    enemy.setDamage(enemy.getDamage() + (int) (enemy.getDamage() * 0.2));
+                    break;
+                case '3':
+                    enemy.printEnemy();
+                    user.printUser();
+                    enemy.attack(user);
+                    break;
+                case '4':
+                    battleFinished = true;
+                    System.out.println("You have successfully run away.");
+                    break;
+                default:
+                    enemy.printEnemy();
+                    user.printUser();
+                    System.out.println("Please Enter a Proper Action");
             }
-            
-            input.close();
+
+            if (user.getHP() <= 0) {
+                userLose = true;
+            }
+            if (enemy.getHP() <= 0) {
+                enemyLose = true;
+            }
+
+            // Finally check for win/lose conditions to close the while loop
+            if (enemyLose) {
+                System.out.println("----------------------------------------------");
+                System.out.println("Enemy has been Defeated!");
+                System.out.println(" __     __           ____  _____  U  ___ u  ____    __   __ ");
+                System.out.println(" \\ \\   /\"/u ___   U /\"___||_ \" _|  \\/\"_ \\U |  _\"\\ u \\ \\ / / ");
+                System.out.println("  \\ \\ / // |_\"_|  \\| | u    | |    | | | |\\| |_) |/  \\ V /  ");
+                System.out.println("  /\\ V /_,-.| |    | |/__  /| |.-,_| |_| | |  _ <   U_|\"|_u ");
+                System.out.println(" U  \\_/-(_U/| |\\u   \\____|u |_|U\\_)-\\___/  |_| \\_\\    |_|   ");
+                System.out.println("   //  .-,_|___|_,-_// \\\\ _// \\\\_    \\\\    //   \\\\.-,//|(_  ");
+                System.out.println("  (__)  \\_)-' '-(_(__)(__(__) (__)  (__)  (__)  (__\\_) (__) ");
+                System.out.println();
+                battleFinished = true;
+            } else if (userLose) {
+                System.out.println("----------------------------------------------");
+                System.out.println("YOU HAVE DIED.");
+                System.out.println(" _______   _______  _______  _______     ___   .___________.");
+                System.out.println("|       \\ |   ____||   ____||   ____|   /   \\  |           |");
+                System.out.println("|  .--.  ||  |__   |  |__   |  |__     /  ^  \\ `---|  |----`");
+                System.out.println("|  |  |  ||   __|  |   __|  |   __|   /  /_\\  \\    |  |     ");
+                System.out.println("|  '--'  ||  |____ |  |     |  |____ /  _____  \\   |  |     ");
+                System.out.println("|_______/ |_______||__|     |_______/__/     \\__\\  |__|     ");
+                System.out.println();
+                battleFinished = true;
+            }
+
         }
+
+        input.close();
     }
 
 }
@@ -202,13 +249,14 @@ class Stickman {
         double val = Math.random();
         if (val >= 0.7) { // 70% chance to hit
             user.setHP(user.getHP() - damage);
-            System.out.println("Stickman attacked... and hits! User has lost " + damage + " hp");
+            System.out.println("Enemy attacked... and hits! User has lost " + damage + " hp");
         } else {
-            System.out.println("Stickman attacked... but misses!");
+            System.out.println("Enemy attacked... but misses!");
         }
     }
 
     public void printEnemy() {
+        System.out.println("----------------------------------------------");
         System.out.println("                        HP: " + hp + " | " + "Damage: " + damage);
         System.out.println("                              /\\ \\  / /\\");
         System.out.println("                             //\\\\ .. //\\\\");
@@ -254,7 +302,7 @@ class User {
     }
 
     public void printUser() {
-        
+
         System.out.println();
         System.out.println("         /\\_/\\");
         System.out.println("        ( o.o )");
