@@ -106,11 +106,13 @@ public class App {
             System.out.println("2: Heal");
             System.out.println("3: Do Nothing");
             System.out.println("4: Run");
+            System.out.println();
+            System.out.print("What would you like to do: ");
 
-            int choice = input.nextInt();
+            char choice = input.next().charAt(0);
 
             switch (choice) {
-                case 1:
+                case '1':
                     // Display word for guessing
                     System.out.println("Word: " + String.valueOf(word_copy));
                     System.out.println("Choose a letter: ");
@@ -147,7 +149,7 @@ public class App {
                     }
 
                     break; // Turn has ended and the user can choose what to do next
-                case 2:
+                case '2':
                     user.heal();
                     if (user.getHP() > startHP) {
                         user.setHP(startHP);
@@ -155,13 +157,15 @@ public class App {
                     System.out.println("The enemy is powering up...");
                     enemy.setDamage(enemy.getDamage() + (int) (enemy.getDamage() * 0.2));
                     break;
-                case 3:
+                case '3':
                     enemy.attack(user);
                     break;
-                case 4:
+                case '4':
                     battleFinished = true;
                     System.out.println("You have successfully run away.");
                     break;
+                default:
+                    System.out.println("Please Enter a Proper Action");
             }
 
             if (user.getHP() <= 0) {
