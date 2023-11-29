@@ -135,6 +135,7 @@ public class App {
                         }
                         System.out.println("The enemy is powering up...");
                         enemy.setDamage(enemy.getDamage() + (int) (enemy.getDamage() * 0.2));
+                        break;
                 }
 
                 // For when the enemy is still alive but the word is done
