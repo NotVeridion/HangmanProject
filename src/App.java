@@ -64,18 +64,24 @@ public class App {
         // Mask the chosen word so the user sees their progress on the word over time
         for (int i = 0; i < word.length(); i++) {
             if (word_copy[i] != ' ') {
-                word_copy[i] = '*';
+                word_copy[i] = '_';
             }
         }
 
         System.out.println("Battle commencing...");
+
+        // Printing out the battlefield
+        enemy.printEnemy();
+        user.printUser();
+        System.out.println("Word: " + String.valueOf(word_copy));
+
         boolean battleFinished = false;
         while (!battleFinished) {
 
             // Next, check for if the current word is already done
             boolean wordComplete = true;
             for (char c : word_copy) {
-                if (c == '*') {
+                if (c == '_') {
                     wordComplete = false;
                     break;
                 }
@@ -90,18 +96,15 @@ public class App {
                 // Mask the chosen word so the user sees their progress on the word over time
                 for (int i = 0; i < word.length(); i++) {
                     if (word_copy[i] != ' ') {
-                        word_copy[i] = '*';
+                        word_copy[i] = '_';
                     }
                 }
+                System.out.println("Word: " + String.valueOf(word_copy));
             }
 
-            // Printing out the battlefield
-            System.out.println("----------------------------------------------");
-            enemy.printEnemy();
-            user.printUser();
-            System.out.println();
 
             // Display actions
+            System.out.println("----------------------------------------------");
             System.out.println("1: Fight");
             System.out.println("2: Heal");
             System.out.println("3: Do Nothing");
@@ -114,13 +117,13 @@ public class App {
             switch (choice) {
                 case '1':
                     // Display word for guessing
-                    System.out.println("Word: " + String.valueOf(word_copy));
-                    System.out.println("Choose a letter: ");
-                    char letter = input.next().charAt(0);
-
-                    System.out.println("----------------------------------------------");
-                    System.out.println("Result: ");
+                    enemy.printEnemy();
+                    user.printUser();
                     System.out.println();
+                    System.out.println("Word: " + String.valueOf(word_copy));
+                    System.out.println();
+                    System.out.print("Choose a letter: ");
+                    char letter = input.next().charAt(0);
 
                     // Check word for user's letter
                     boolean found = false;
@@ -134,16 +137,16 @@ public class App {
                     // Finally check the actions
                     if (found) {
                         user.attack(enemy);
-                        if (enemy.getHP() <= 0) {
-                            enemyLose = true;
-                        } else {
-                            System.out.println("Enemy hit! Enemy has lost " + user.getDamage() + " hp!");
-                            System.out.println("Word: " + String.valueOf(word_copy));
-                            System.out.println();
-                            System.out.println("Enemy loses concentration and misses!");
-                        }
+                        enemy.printEnemy();
+                        user.printUser();
+                        System.out.println("Letter found, Enemy hit!");
+                        System.out.println("Enemy has lost " + user.getDamage() + " hp!");
+                        System.out.println();
+                        System.out.println("Enemy loses concentration and misses!");
+                        System.out.println();
+                        System.out.println("Word: " + String.valueOf(word_copy));
                     } else {
-                        System.out.println("Letter not found. Missed!");
+                        System.out.println("Letter not found. Your Attack Missed!");
                         System.out.println();
                         enemy.attack(user);
                     }
@@ -154,10 +157,17 @@ public class App {
                     if (user.getHP() > startHP) {
                         user.setHP(startHP);
                     }
-                    System.out.println("The enemy is powering up...");
+                    enemy.printEnemy();
+                    user.printUser();
+                    System.out.println("User Healed.");
+                    System.out.println("The enemy is Enraged...");
+                    System.out.println("Enemy damage increased!");
+                    System.out.println("Word: " + String.valueOf(word_copy));
                     enemy.setDamage(enemy.getDamage() + (int) (enemy.getDamage() * 0.2));
                     break;
                 case '3':
+                    enemy.printEnemy();
+                    user.printUser();
                     enemy.attack(user);
                     break;
                 case '4':
@@ -165,19 +175,41 @@ public class App {
                     System.out.println("You have successfully run away.");
                     break;
                 default:
+                    enemy.printEnemy();
+                    user.printUser();
                     System.out.println("Please Enter a Proper Action");
             }
 
             if (user.getHP() <= 0) {
                 userLose = true;
             }
+            if (enemy.getHP() <= 0) {
+                enemyLose = true;
+            }
 
             // Finally check for win/lose conditions to close the while loop
             if (enemyLose) {
-                System.out.println("VICTORY. ENEMY DEFEATED.");
+                System.out.println("----------------------------------------------");
+                System.out.println("Enemy has been Defeated!");
+                System.out.println(" __     __           ____  _____  U  ___ u  ____    __   __ ");
+                System.out.println(" \\ \\   /\"/u ___   U /\"___||_ \" _|  \\/\"_ \\U |  _\"\\ u \\ \\ / / ");
+                System.out.println("  \\ \\ / // |_\"_|  \\| | u    | |    | | | |\\| |_) |/  \\ V /  ");
+                System.out.println("  /\\ V /_,-.| |    | |/__  /| |.-,_| |_| | |  _ <   U_|\"|_u ");
+                System.out.println(" U  \\_/-(_U/| |\\u   \\____|u |_|U\\_)-\\___/  |_| \\_\\    |_|   ");
+                System.out.println("   //  .-,_|___|_,-_// \\\\ _// \\\\_    \\\\    //   \\\\.-,//|(_  ");
+                System.out.println("  (__)  \\_)-' '-(_(__)(__(__) (__)  (__)  (__)  (__\\_) (__) ");
+                System.out.println();
                 battleFinished = true;
             } else if (userLose) {
-                System.out.println("DEFEAT. YOU HAVE DIED.");
+                System.out.println("----------------------------------------------");
+                System.out.println("YOU HAVE DIED.");
+                System.out.println(" _______   _______  _______  _______     ___   .___________.");
+                System.out.println("|       \\ |   ____||   ____||   ____|   /   \\  |           |");
+                System.out.println("|  .--.  ||  |__   |  |__   |  |__     /  ^  \\ `---|  |----`");
+                System.out.println("|  |  |  ||   __|  |   __|  |   __|   /  /_\\  \\    |  |     ");
+                System.out.println("|  '--'  ||  |____ |  |     |  |____ /  _____  \\   |  |     ");
+                System.out.println("|_______/ |_______||__|     |_______/__/     \\__\\  |__|     ");
+                System.out.println();
                 battleFinished = true;
             }
 
@@ -217,13 +249,14 @@ class Stickman {
         double val = Math.random();
         if (val >= 0.7) { // 70% chance to hit
             user.setHP(user.getHP() - damage);
-            System.out.println("Stickman attacked... and hits! User has lost " + damage + " hp");
+            System.out.println("Enemy attacked... and hits! User has lost " + damage + " hp");
         } else {
-            System.out.println("Stickman attacked... but misses!");
+            System.out.println("Enemy attacked... but misses!");
         }
     }
 
     public void printEnemy() {
+        System.out.println("----------------------------------------------");
         System.out.println("                        HP: " + hp + " | " + "Damage: " + damage);
         System.out.println("                              /\\ \\  / /\\");
         System.out.println("                             //\\\\ .. //\\\\");
